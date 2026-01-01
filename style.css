@@ -19,12 +19,13 @@ h1 {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(16, 1fr);
+    grid-template-columns: repeat(auto-fill, 100px);
     gap: 5px;
     max-width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
     padding: 10px;
+    justify-content: center;
 }
 
 .button {
@@ -38,6 +39,7 @@ h1 {
     transition: all 0.3s ease;
     min-height: 40px;
     box-sizing: border-box;
+    width: 100px; /* Fixed width of 100 pixels */
 }
 
 .button:hover {
