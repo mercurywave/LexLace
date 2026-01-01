@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('words.json')
         .then(response => response.json())
         .then(data => {
-            const words = data.words;
+            const groupNames = Object.keys(data);
+            const groupWords = groupNames.map(name => data[name]);
+            const words = groupWords.flat();
             const grid = document.getElementById('grid');
             
             // Create 16x16 grid of buttons
