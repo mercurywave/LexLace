@@ -4,27 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('words.json')
         .then(response => response.json())
         .then(data => {
-            const groupNames = Object.keys(data);
-            const groupWords = groupNames.map(name => data[name]);
-            const words = groupWords.flat();
-            const grid = document.getElementById('grid');
-            
-            // Create 16x16 grid of buttons
-            for (let i = 0; i < 256; i++) {
-                const button = document.createElement('button');
-                button.className = 'button';
-                
-                // Select a random word from our array, cycling through if needed
-                const wordIndex = i % words.length;
-                button.textContent = words[wordIndex];
-                
-                // Add click event to toggle selection
-                button.addEventListener('click', function() {
-                    this.classList.toggle('selected');
-                });
-                
-                grid.appendChild(button);
-            }
+            populateGrid(data);
         })
         .catch(error => {
             console.error('Error loading words:', error);
@@ -44,3 +24,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 });
+
+function populateGrid(data) {
+    const groupNames = Object.keys(data);
+    const groupWords = groupNames.map(name => data[name]);
+    const words = groupWords.flat();
+    const grid = document.getElementById('grid');
+
+    // Create 16x16 grid of buttons
+    for (let i = 0; i < 256; i++) {
+        const button = document.createElement('button');
+        button.className = 'button';
+
+        // Select a random word from our array, cycling through if needed
+        const wordIndex = i % words.length;
+        button.textContent = words[wordIndex];
+
+        // Add click event to toggle selection
+        button.addEventListener('click', function () {
+            this.classList.toggle('selected');
+        });
+
+        grid.appendChild(button);
+    }
+}
