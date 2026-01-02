@@ -95,14 +95,18 @@ function populateGrid(data) {
         const wordIndex = i % words.length;
         button.textContent = words[wordIndex];
 
-        // Add click event to toggle selection
-        button.addEventListener('click', function () {
-            if(this.classList.contains('valid')) return;
-            this.classList.toggle('selected');
+        let clickHandler = e => {
+            if(button.classList.contains('valid')) return;
+            button.classList.toggle('selected');
             // Check if MATCH selected buttons form a valid word
             checkForValidWord(grid, groupWords);
             updateButtons();
-        });
+            e.preventDefault();
+        };
+
+        // Add click event to toggle selection
+        button.addEventListener('touchstart', clickHandler);
+        button.addEventListener('click', clickHandler);
 
         grid.appendChild(button);
     }
