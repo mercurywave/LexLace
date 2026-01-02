@@ -74,6 +74,11 @@ function populateGrid(data) {
         if(count >= GROUPS) break;
     }
     groupNames.forEach(groupName => {
+        const wordsFromGroup = data[groupName];
+        const hasDuplicates = wordsFromGroup.length !== [...new Set(wordsFromGroup)].length;
+        if (hasDuplicates) {
+            console.log(`Duplicate words found in group: ${groupName}`);
+        }
     });
     const grid = document.getElementById('grid');
     let words = shuffle(foundWords);
