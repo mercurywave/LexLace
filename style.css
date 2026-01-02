@@ -55,6 +55,7 @@ h1 {
 
 .button.valid {
     background-color: #2378bd;
+    pointer-events: none;
 }
 
 .button.matched {
