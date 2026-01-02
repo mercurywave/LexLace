@@ -13,6 +13,7 @@ body {
     text-align: center; 
     padding-bottom: 80px; /* Make space for bottom bar */
     box-sizing: border-box; /* Ensure padding doesn't add to width */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 h1 {
