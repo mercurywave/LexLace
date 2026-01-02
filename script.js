@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             populateGrid(data);
+            hookButtons();
         })
         .catch(error => {
             console.error('Error loading words:', error);
@@ -29,6 +30,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 });
+
+function hookButtons(){
+    const btReset = document.getElementById('btReset');
+    const btShuffle = document.getElementById('btShuffle');
+    const btClear = document.getElementById('btClear');
+    const grid = document.getElementById('grid');
+    btReset.addEventListener('click', () => {
+        const buttons = grid.querySelectorAll('.button');
+        buttons.forEach(button => {
+            button.classList.remove('selected');
+        });
+    });
+    btShuffle.addEventListener('click', () => {
+        const buttons = Array.from(grid.querySelectorAll('.button'));
+        shuffle(buttons);
+        grid.innerHTML = '';
+        buttons.forEach(button => grid.appendChild(button));
+    });
+    btClear.addEventListener('click', () => {
+        const validButtons = grid.querySelectorAll('.valid');
+        validButtons.forEach(button => {
+            button.remove();
+        });
+    });
+}
 
 function populateGrid(data) {
     const allGroupNames = Object.keys(data);
@@ -67,6 +93,7 @@ function populateGrid(data) {
             this.classList.toggle('selected');
             // Check if MATCH selected buttons form a valid word
             checkForValidWord(grid, groupWords);
+            updateButtons();
         });
 
         grid.appendChild(button);
@@ -105,6 +132,18 @@ function checkForValidWord(grid, groups){
         selectedButtons.forEach(button => button.classList.remove('valid'));
     }
 }
+
+function updateButtons(){
+    const btReset = document.getElementById('btReset');
+    const btShuffle = document.getElementById('btShuffle');
+    const btClear = document.getElementById('btClear');
+    const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'));
+    const validButtons = Array.from(grid.querySelectorAll('.button.valid'));
+    btReset.classList.toggle('noDisp', selectedButtons.length === 0);
+    btShuffle.classList.toggle('noDisp', selectedButtons.length > 0);
+    btClear.classList.toggle('noDisp', selectedButtons.length > 0 || validButtons.length === 0);
+}
+updateButtons();
 
 function shuffle(arr){
     for (let i = arr.length - 1; i > 0; i--) {

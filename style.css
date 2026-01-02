@@ -9,7 +9,8 @@ body {
 .game-container {
     max-width: 1200px;
     margin: 0 auto;
-    text-align: center;
+    text-align: center; 
+    padding-bottom: 80px; /* Make space for bottom bar */
 }
 
 h1 {
@@ -28,6 +29,37 @@ h1 {
     justify-content: center;
 }
 
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000; /* Ensure it appears over the grid */
+}
+
+.action {
+    padding: 10px;
+    font-size: 14px;
+    background-color: #fff;
+    border: 2px solid #3b2626;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 40px;
+    box-sizing: border-box;
+}
+
+.action:hover {
+    background-color: #fff566;
+    border: 2px solid #632121;
+}
+
 .button {
     padding: 10px;
     font-size: 14px;
@@ -39,7 +71,7 @@ h1 {
     transition: all 0.3s ease;
     min-height: 40px;
     box-sizing: border-box;
-    width: 120px; /* Fixed width of 100 pixels */
+    width: 120px;
 }
 
 .button:not(.valid):not(.selected):hover {
@@ -61,4 +93,8 @@ h1 {
 .button.matched {
     background-color: #2196F3;
     cursor: default;
+}
+
+.noDisp{
+    display: none;
 }
