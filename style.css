@@ -19,7 +19,7 @@ h1 {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 100px);
+    grid-template-columns: repeat(auto-fill, 120px);
     gap: 5px;
     max-width: 100%;
     margin: 0 auto;
@@ -39,10 +39,10 @@ h1 {
     transition: all 0.3s ease;
     min-height: 40px;
     box-sizing: border-box;
-    width: 100px; /* Fixed width of 100 pixels */
+    width: 120px; /* Fixed width of 100 pixels */
 }
 
-.button:hover {
+.button:not(.valid):not(.selected):hover {
     background-color: #45a049;
     transform: translateY(-2px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -51,6 +51,10 @@ h1 {
 .button.selected {
     background-color: #ff6b6b;
     transform: scale(0.95);
+}
+
+.button.valid {
+    background-color: #2378bd;
 }
 
 .button.matched {

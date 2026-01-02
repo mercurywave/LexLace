@@ -42,9 +42,46 @@ function populateGrid(data) {
 
         // Add click event to toggle selection
         button.addEventListener('click', function () {
+            if(this.classList.contains('valid')) return;
             this.classList.toggle('selected');
+            // Check if 4 selected buttons form a valid word
+            checkForValidWord(grid, data);
         });
 
         grid.appendChild(button);
+    }
+}
+
+function checkForValidWord(grid, data){
+    const groupNames = Object.keys(data);
+    const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'))
+    const selectedWords = selectedButtons.map(button => button.textContent);
+    
+    if(selectedWords.length != 4) return;
+
+    // Check if all selected words belong to the same group
+    let validGroup = null;
+    for (const groupName of groupNames) {
+        if (data[groupName].includes(selectedWords[0])) {
+            validGroup = groupName;
+            break;
+        }
+    }
+
+    selectedButtons.forEach(button => {
+        button.classList.remove('selected');
+    });
+    
+    if (!validGroup) return; // No valid group found for first word
+
+    // Check that all selected words belong to the same group
+    const allFromSameGroup = selectedWords.every(word => data[validGroup].includes(word));
+
+    if (allFromSameGroup) {
+        // All words are from the same group, highlight them
+        selectedButtons.forEach(button => button.classList.add('valid'));
+    } else {
+        // Words are from different groups, remove highlighting
+        selectedButtons.forEach(button => button.classList.remove('valid'));
     }
 }
