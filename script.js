@@ -130,6 +130,8 @@ function checkForValidWord(grid, groups){
     const allFromSameGroup = selectedWords.every(word => groups[validGroup].includes(word));
 
     if (allFromSameGroup) {
+
+        showToast(validGroup);
         // All words are from the same group, highlight them
         selectedButtons.forEach(button => button.classList.add('valid'));
     } else {
@@ -156,4 +158,15 @@ function shuffle(arr){
         [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
+}
+
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    // Hide toast after specified duration
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, duration);
 }
