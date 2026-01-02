@@ -41,18 +41,21 @@ function hookButtons(){
         buttons.forEach(button => {
             button.classList.remove('selected');
         });
+        updateButtons();
     });
     btShuffle.addEventListener('click', () => {
         const buttons = Array.from(grid.querySelectorAll('.button'));
         shuffle(buttons);
         grid.innerHTML = '';
         buttons.forEach(button => grid.appendChild(button));
+        updateButtons();
     });
     btClear.addEventListener('click', () => {
         const validButtons = grid.querySelectorAll('.valid');
         validButtons.forEach(button => {
             button.remove();
         });
+        updateButtons();
     });
 }
 
