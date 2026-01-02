@@ -137,6 +137,10 @@ function checkForValidWord(grid, groups){
         showToast(validGroup);
         // All words are from the same group, highlight them
         selectedButtons.forEach(button => button.classList.add('valid'));
+
+        if (grid.querySelectorAll('.button').length === grid.querySelectorAll('.button.valid').length){
+            victory();
+        }
     } else {
         // Words are from different groups, remove highlighting
         selectedButtons.forEach(button => button.classList.remove('valid'));
@@ -172,4 +176,13 @@ function showToast(message, duration = 3000) {
     setTimeout(() => {
         toast.classList.remove('show');
     }, duration);
+}
+
+function victory(){
+    const grid = document.getElementById('grid');
+    grid.innerHTML = ''; // Clear the board
+    showToast('Victory!');
+    btReset.disabled = true; // Disable reset button
+    btShuffle.disabled = true; // Disable shuffle button
+    btClear.disabled = true; // Disable clear complete button
 }
