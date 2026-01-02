@@ -77,6 +77,12 @@ h1 {
     min-height: 40px;
     box-sizing: border-box;
     width: 120px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .button:not(.valid):not(.selected):hover {

@@ -105,7 +105,7 @@ function populateGrid(data) {
         };
 
         // Add click event to toggle selection
-        button.addEventListener('touchstart', clickHandler);
+        //button.addEventListener('touchstart', clickHandler);
         button.addEventListener('click', clickHandler);
 
         grid.appendChild(button);
