@@ -32,15 +32,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function populateGrid(data) {
     const allGroupNames = Object.keys(data);
-    const groupNames = shuffle(allGroupNames).slice(0, GROUPS);
+    const groupNames = shuffle(allGroupNames);
     let foundWords = [];
     let groupWords = {};
-    groupNames.forEach(groupName => {
+    let count = 0;
+    for(let groupName of groupNames){
         const wordsFromGroup = data[groupName];
         const uniqueWords = shuffle(wordsFromGroup)
             .filter(word => !foundWords.includes(word));
+        if(uniqueWords.length < PER) continue;
         groupWords[groupName] = uniqueWords.slice(0, PER);
+        console.log(groupName, groupWords[groupName]);
         foundWords = foundWords.concat(groupWords[groupName]);
+        count++;
+        if(count >= GROUPS) break;
+    }
+    groupNames.forEach(groupName => {
     });
     const grid = document.getElementById('grid');
     let words = shuffle(foundWords);
