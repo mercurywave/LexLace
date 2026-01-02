@@ -40,7 +40,6 @@
     "Baltic",
     "Bismarck",
     "Coral",
-    "East China",
     "Gulf of Mexico",
     "Hauraki",
     "Hudson",
@@ -256,8 +255,7 @@
     "Downpour",
     "Deluge",
     "Gale",
-    "Mistral",
-    "Zonda"
+    "Mistral"
   ],
   "Birds": [
     "Eagle",
@@ -297,9 +295,7 @@
     "Hyena",
     "Wildebeest",
     "Cape Buffalo",
-    "African Elephant Shrew",
-    "African Crowned Crane",
-    "Nile Crocodile",
+    "Crocodile",
     "Kudu",
     "Meerkat",
     "Okapi",
@@ -309,9 +305,7 @@
     "Warthog",
     "Chimpanzee",
     "Gorilla",
-    "Sitatunga",
-    "African Wild Dog",
-    "Leatherback Sea Turtle"
+    "Sitatunga"
   ],
   "Furniture": [
     "Sofa",
@@ -322,22 +316,18 @@
     "Coffee table",
     "Bookcase",
     "Desk",
-    "Office chair",
     "Shelf",
     "Wardrobe",
     "Lounger",
     "Dresser",
     "Bench",
-    "Chaise lounge",
+    "Chaise",
     "Cabinet",
     "Ottoman",
-    "Rocking chair",
-    "Chest of drawers",
+    "Rocker",
+    "Chest",
     "Daybed",
     "Sideboard",
-    "Barrel chair",
-    "Console table",
-    "Sofa bed",
     "Credenza"
   ],
   "Prepositions": [
@@ -375,7 +365,6 @@
     "Jellyfish",
     "Squid",
     "Clownfish",
-    "Sea Turtle",
     "Anglerfish",
     "Crab",
     "Starfish",
@@ -383,7 +372,6 @@
     "Barracuda",
     "Whale",
     "Stingray",
-    "Sea Otter",
     "Sardine",
     "Seal",
     "Lobster",
@@ -391,7 +379,7 @@
     "Bluefish",
     "Goby",
     "Flounder",
-    "Sea Cucumber",
+    "Shrimp",
     "Anemone"
   ],
   "Insects": [
