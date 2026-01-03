@@ -25,6 +25,10 @@ body {
     bottom: 70px;
     transform: translateX(-50%); /* centers horizontally */
 }
+.complete{
+    text-decoration: line-through;
+    color: gray;
+}
 
 .game-container {
     max-width: 100vw; /* Changed from 1200px to viewport width */

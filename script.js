@@ -62,6 +62,7 @@ function hookButtons(data) {
             if (__progress[groupName] > 0) {
                 disp = groupName + ' ' + __progress[groupName] + '/' + CHUNK_COUNT;
             }
+            if(__progress[groupName] >= CHUNK_COUNT) div.classList.add('complete');
             div.textContent = disp;
             container.appendChild(div);
         }
