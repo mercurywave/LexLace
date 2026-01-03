@@ -3,11 +3,12 @@ const GROUPS = 12;
 const PER = 12;
 const MATCH = 4;
 
-const DEBUG = true; // TODO: set false
+const DEBUG = false; // TODO: set false
 
 let __errors = 0;
 let __hints = [];
 let __victory = false;
+let __gameGroups = {};
 
 // script.js
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,6 +44,7 @@ function hookButtons(data){
     const btShuffle = document.getElementById('btShuffle');
     const btClear = document.getElementById('btClear');
     const btNewGame = document.getElementById('btNewGame');
+    const btHint = document.getElementById('btHint');
     const btCheat = document.getElementById('btCheat');
     const grid = document.getElementById('grid');
     btReset.addEventListener('click', () => {
@@ -68,6 +70,21 @@ function hookButtons(data){
     });
     btNewGame.addEventListener('click', () => {
         populateGrid(data);
+    });
+    btHint.addEventListener('click', () => {
+        const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'))
+        if(selectedButtons.length != 1) return;
+        let word = selectedButtons[0].textContent;    
+        for(const groupName of Object.keys(__gameGroups)){
+            if(__gameGroups[groupName].includes(word)){
+                showToast(groupName);
+                if(!__hints.includes(word)){
+                    __hints.push(word);
+                    selectedButtons[0].setAttribute('title', groupName);
+                }
+                break;
+            }
+        }
     });
     btCheat.addEventListener('click', () => {
         if(DEBUG){
@@ -99,6 +116,7 @@ function populateGrid(data) {
         count++;
         if(count >= GROUPS) break;
     }
+    __gameGroups = groupWords;
     groupNames.forEach(groupName => {
         const wordsFromGroup = data[groupName];
         const hasDuplicates = wordsFromGroup.length !== [...new Set(wordsFromGroup)].length;
@@ -138,8 +156,16 @@ function populateGrid(data) {
 
 function checkForValidWord(grid, groups){
     if(DEBUG && __victory) { victory(groups); }
-    const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'))
+    const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'));
     const selectedWords = selectedButtons.map(button => button.textContent);
+
+    if(selectedButtons.length == 1) {
+        // save you a click if you already asked for a hint
+        let title = selectedButtons[0].title; // bit of a hack to rely on the title
+        if(title){
+            showToast(title);
+        }
+    }
     
     if(selectedWords.length != MATCH) return;
 
@@ -184,6 +210,7 @@ function updateButtons(){
     const btShuffle = document.getElementById('btShuffle');
     const btClear = document.getElementById('btClear');
     const btNewGame = document.getElementById('btNewGame');
+    const btHint = document.getElementById('btHint');
     const btCheat = document.getElementById('btCheat');
     const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'));
     const validButtons = Array.from(grid.querySelectorAll('.button.valid'));
@@ -191,6 +218,8 @@ function updateButtons(){
     btShuffle.classList.toggle('noDisp', selectedButtons.length > 0 || __victory);
     btClear.classList.toggle('noDisp', selectedButtons.length > 0 || validButtons.length === 0);
     btNewGame.classList.toggle('noDisp', !__victory);
+    btHint.classList.toggle('noDisp', selectedButtons.length === 0 || __victory);
+    btHint.disabled = (selectedButtons.length != 1);
     btCheat.classList.toggle('noDisp', !DEBUG || __victory);
 }
 updateButtons();
