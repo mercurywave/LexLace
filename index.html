@@ -20,12 +20,18 @@
         </div>
     </div>
     <div class="bottom-bar">
+        <button id="btHelp" class="action">?</button>
         <button id="btReset" class="action">Reset</button>
         <button id="btShuffle" class="action">Shuffle</button>
         <button id="btClear" class="action">Clear Complete</button>
         <button id="btNewGame" class="action">New Game</button>
         <button id="btHint" class="action">Hint</button>
         <button id="btCheat" class="action">CHEAT</button>
+    </div>
+    <div id="soj" class="noDisp"></div>
+    <div id="popHelp" popover>
+        Match 4 related items at a time to remove them from the board. Remove all to win.
+        <ul id="categoryList"></ul>
     </div>
     <div id="toast" class="toast"></div>
     <script src="script.js"></script>

@@ -2,6 +2,7 @@
 const GROUPS = 12;
 const PER = 12;
 const MATCH = 4;
+const CHUNK_COUNT = PER / MATCH;
 
 const DEBUG = false; // TODO: set false
 
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function hookButtons(data){
     
+    const btHelp = document.getElementById('btHelp');
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
     const btClear = document.getElementById('btClear');
@@ -48,6 +50,25 @@ function hookButtons(data){
     const btHint = document.getElementById('btHint');
     const btCheat = document.getElementById('btCheat');
     const grid = document.getElementById('grid');
+    let soj = document.getElementById('soj');
+    btHelp.addEventListener('click', () => {
+        let pop = document.getElementById('popHelp');
+        if(pop.matches(':popover-open')) return; // already visible - dismiss
+        let container = document.getElementById('categoryList');
+        container.innerHTML = '';
+        for(const groupName of Object.keys(__gameGroups)){
+            const div = document.createElement('li');
+            let disp = "???";
+            if(__progress[groupName] > 0){
+                disp = groupName + ' ' + __progress[groupName] + '/' + CHUNK_COUNT;
+            }
+            div.textContent = disp;
+            container.appendChild(div);
+        }
+        pop.showPopover();
+        soj.classList.toggle('noDisp', false);
+    });
+    soj.addEventListener('click', () => soj.classList.toggle('noDisp', true));
     btReset.addEventListener('click', () => {
         const buttons = grid.querySelectorAll('.button');
         buttons.forEach(button => {
@@ -207,7 +228,7 @@ function checkForValidWord(grid, groups){
             victory(groups);
         }
         else {
-            showToast(validGroup + ' ' + __progress[validGroup] + '/' + (PER / MATCH));
+            showToast(validGroup + ' ' + __progress[validGroup] + '/' + CHUNK_COUNT);
         }
     } else {
         // Words are from different groups, remove highlighting
@@ -217,6 +238,7 @@ function checkForValidWord(grid, groups){
 }
 
 function updateButtons(){
+    const btHelp = document.getElementById('btHelp');
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
     const btClear = document.getElementById('btClear');
@@ -232,6 +254,7 @@ function updateButtons(){
     btHint.classList.toggle('noDisp', selectedButtons.length === 0 || __victory);
     btHint.disabled = (selectedButtons.length != 1);
     btCheat.classList.toggle('noDisp', !DEBUG || __victory);
+    btHelp.classList.toggle('noDisp', __victory);
 }
 updateButtons();
 
