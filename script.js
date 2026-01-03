@@ -3,6 +3,12 @@ const GROUPS = 12;
 const PER = 12;
 const MATCH = 4;
 
+const DEBUG = true; // TODO: set false
+
+let __errors = 0;
+let __hints = [];
+let __victory = false;
+
 // script.js
 document.addEventListener('DOMContentLoaded', function() {
     // Load words from JSON file
@@ -10,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             populateGrid(data);
-            hookButtons();
+            hookButtons(data);
         })
         .catch(error => {
             console.error('Error loading words:', error);
@@ -31,10 +37,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-function hookButtons(){
+function hookButtons(data){
+    
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
     const btClear = document.getElementById('btClear');
+    const btNewGame = document.getElementById('btNewGame');
+    const btCheat = document.getElementById('btCheat');
     const grid = document.getElementById('grid');
     btReset.addEventListener('click', () => {
         const buttons = grid.querySelectorAll('.button');
@@ -57,9 +66,23 @@ function hookButtons(){
         });
         updateButtons();
     });
+    btNewGame.addEventListener('click', () => {
+        populateGrid(data);
+    });
+    btCheat.addEventListener('click', () => {
+        if(DEBUG){
+            __victory = true; // lazy - you have to click something else
+            updateButtons();
+        }
+    });
 }
 
 function populateGrid(data) {
+    __errors = 0;
+    __hints = [];
+    __victory = false;
+    document.getElementById('victory').classList.toggle("noDisp", true);
+
     const allGroupNames = Object.keys(data);
     const groupNames = shuffle(allGroupNames);
     let foundWords = [];
@@ -110,9 +133,11 @@ function populateGrid(data) {
 
         grid.appendChild(button);
     }
+    updateButtons();
 }
 
 function checkForValidWord(grid, groups){
+    if(DEBUG && __victory) { victory(groups); }
     const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'))
     const selectedWords = selectedButtons.map(button => button.textContent);
     
@@ -138,16 +163,19 @@ function checkForValidWord(grid, groups){
 
     if (allFromSameGroup) {
 
-        showToast(validGroup);
         // All words are from the same group, highlight them
         selectedButtons.forEach(button => button.classList.add('valid'));
-
+        
         if (grid.querySelectorAll('.button').length === grid.querySelectorAll('.button.valid').length){
-            victory();
+            victory(groups);
+        }
+        else {
+            showToast(validGroup);
         }
     } else {
         // Words are from different groups, remove highlighting
         selectedButtons.forEach(button => button.classList.remove('valid'));
+        __errors++;
     }
 }
 
@@ -155,11 +183,15 @@ function updateButtons(){
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
     const btClear = document.getElementById('btClear');
+    const btNewGame = document.getElementById('btNewGame');
+    const btCheat = document.getElementById('btCheat');
     const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'));
     const validButtons = Array.from(grid.querySelectorAll('.button.valid'));
     btReset.classList.toggle('noDisp', selectedButtons.length === 0);
-    btShuffle.classList.toggle('noDisp', selectedButtons.length > 0);
+    btShuffle.classList.toggle('noDisp', selectedButtons.length > 0 || __victory);
     btClear.classList.toggle('noDisp', selectedButtons.length > 0 || validButtons.length === 0);
+    btNewGame.classList.toggle('noDisp', !__victory);
+    btCheat.classList.toggle('noDisp', !DEBUG || __victory);
 }
 updateButtons();
 
@@ -182,11 +214,53 @@ function showToast(message, duration = 3000) {
     }, duration);
 }
 
-function victory(){
+function victory(groups){
+    __victory = true;
     const grid = document.getElementById('grid');
     grid.innerHTML = ''; // Clear the board
-    showToast('Victory!');
-    btReset.disabled = true; // Disable reset button
-    btShuffle.disabled = true; // Disable shuffle button
-    btClear.disabled = true; // Disable clear complete button
+    const victory = document.getElementById('victory');
+    victory.classList.toggle("noDisp", false);
+
+    const divMistakes = document.getElementById('mistakes');
+    divMistakes.innerText = __errors;
+
+    const divHints = document.getElementById('hints');
+    divHints.innerText = __hints.length;
+
+    let score = (200 - __errors - __hints.length * 5) / 2;
+    let grade = "-";
+    if(score >= 70) grade = "C";
+    if(score >= 77) grade = "C+";
+    if(score >= 80) grade = "B-";
+    if(score >= 83) grade = "B";
+    if(score >= 87) grade = "B+";
+    if(score >= 90) grade = "A-";
+    if(score >= 93) grade = "A";
+    if(score >= 97) grade = "A+";
+    if(score >= 100) grade = "S+";
+    document.getElementById('grade').innerText = grade;
+
+    let divMain = document.getElementById('categories');
+    divMain.innerHTML = '';
+
+    for(const groupName of Object.keys(groups)){
+        const words = groups[groupName];
+        
+        const h2 = document.createElement('h2');
+        h2.textContent = groupName;
+        divMain.appendChild(h2);
+
+        const container = document.createElement('div');
+        container.className = 'categories-list';
+        words.forEach(word => {
+            const span = document.createElement('span');
+            span.className = 'clue';
+            span.textContent = word;
+            container.appendChild(span);
+        });
+        divMain.appendChild(container);
+    }
+
+
+    updateButtons();
 }

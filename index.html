@@ -9,11 +9,22 @@
 <body>
     <div class="game-container">
         <div id="grid" class="grid"></div>
+        <div id="victory" class="noDisp">
+            <h1>Congratulations!</h1>
+            <div id="scores">
+                Mistakes: <span id="mistakes"></span><br/>
+                Hints: <span id="hints"></span><br/>
+                Grade: <span id="grade"></span><br/>
+            </div>
+            <div id="categories"></div>
+        </div>
     </div>
     <div class="bottom-bar">
         <button id="btReset" class="action">Reset</button>
         <button id="btShuffle" class="action">Shuffle</button>
         <button id="btClear" class="action">Clear Complete</button>
+        <button id="btNewGame" class="action">New Game</button>
+        <button id="btCheat" class="action">CHEAT</button>
     </div>
     <div id="toast" class="toast"></div>
     <script src="script.js"></script>
