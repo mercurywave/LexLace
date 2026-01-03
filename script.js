@@ -93,6 +93,10 @@ function hookButtons(data){
             updateButtons();
         }
     });
+
+    document.getElementById('toast').addEventListener('click', () => {
+        toast.classList.remove('show');
+    });
 }
 
 function populateGrid(data) {
