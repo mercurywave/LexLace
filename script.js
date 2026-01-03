@@ -13,7 +13,7 @@ let __gameGroups = {};
 let __progress = {};
 
 // script.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Load words from JSON file
     fetch('words.json')
         .then(response => response.json())
@@ -23,25 +23,25 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error loading words:', error);
-            
+
             // Fallback: create a grid with placeholder text if JSON fails
             const grid = document.getElementById('grid');
             for (let i = 0; i < GROUPS * PER; i++) {
                 const button = document.createElement('button');
                 button.className = 'button';
                 button.textContent = `Word ${i + 1}`;
-                
-                button.addEventListener('click', function() {
+
+                button.addEventListener('click', function () {
                     this.classList.toggle('selected');
                 });
-                
+
                 grid.appendChild(button);
             }
         });
 });
 
-function hookButtons(data){
-    
+function hookButtons(data) {
+
     const btHelp = document.getElementById('btHelp');
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
@@ -53,13 +53,13 @@ function hookButtons(data){
     let soj = document.getElementById('soj');
     btHelp.addEventListener('click', () => {
         let pop = document.getElementById('popHelp');
-        if(pop.matches(':popover-open')) return; // already visible - dismiss
+        if (pop.matches(':popover-open')) return; // already visible - dismiss
         let container = document.getElementById('categoryList');
         container.innerHTML = '';
-        for(const groupName of Object.keys(__gameGroups)){
+        for (const groupName of Object.keys(__gameGroups)) {
             const div = document.createElement('li');
             let disp = "???";
-            if(__progress[groupName] > 0){
+            if (__progress[groupName] > 0) {
                 disp = groupName + ' ' + __progress[groupName] + '/' + CHUNK_COUNT;
             }
             div.textContent = disp;
@@ -95,12 +95,12 @@ function hookButtons(data){
     });
     btHint.addEventListener('click', () => {
         const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'))
-        if(selectedButtons.length != 1) return;
-        let word = selectedButtons[0].textContent;    
-        for(const groupName of Object.keys(__gameGroups)){
-            if(__gameGroups[groupName].includes(word)){
+        if (selectedButtons.length != 1) return;
+        let word = selectedButtons[0].textContent;
+        for (const groupName of Object.keys(__gameGroups)) {
+            if (__gameGroups[groupName].includes(word)) {
                 showToast(groupName);
-                if(!__hints.includes(word)){
+                if (!__hints.includes(word)) {
                     __hints.push(word);
                     selectedButtons[0].setAttribute('title', groupName);
                 }
@@ -109,7 +109,7 @@ function hookButtons(data){
         }
     });
     btCheat.addEventListener('click', () => {
-        if(DEBUG){
+        if (DEBUG) {
             __victory = true; // lazy - you have to click something else
             updateButtons();
         }
@@ -125,7 +125,7 @@ function populateGrid(data) {
     __errors = 0;
     __hints = [];
     __victory = false;
-    __gameGroups ={};
+    __gameGroups = {};
     __progress = {};
     document.getElementById('victory').classList.toggle("noDisp", true);
 
@@ -134,17 +134,17 @@ function populateGrid(data) {
     let foundWords = [];
     let groupWords = {};
     let count = 0;
-    for(let groupName of groupNames){
+    for (let groupName of groupNames) {
         const wordsFromGroup = data[groupName];
         const uniqueWords = shuffle(wordsFromGroup)
             .filter(word => !foundWords.includes(word));
-        if(uniqueWords.length < PER) continue;
+        if (uniqueWords.length < PER) continue;
         groupWords[groupName] = uniqueWords.slice(0, PER);
         __progress[groupName] = 0;
         console.log(groupName, groupWords[groupName]);
         foundWords = foundWords.concat(groupWords[groupName]);
         count++;
-        if(count >= GROUPS) break;
+        if (count >= GROUPS) break;
     }
     __gameGroups = groupWords;
     groupNames.forEach(groupName => {
@@ -167,7 +167,7 @@ function populateGrid(data) {
         button.textContent = words[wordIndex];
 
         let clickHandler = e => {
-            if(button.classList.contains('valid')) return;
+            if (button.classList.contains('valid')) return;
             button.classList.toggle('selected');
             // Check if MATCH selected buttons form a valid word
             checkForValidWord(grid, groupWords);
@@ -184,25 +184,25 @@ function populateGrid(data) {
     updateButtons();
 }
 
-function checkForValidWord(grid, groups){
-    if(DEBUG && __victory) { victory(groups); }
+function checkForValidWord(grid, groups) {
+    if (DEBUG && __victory) { victory(groups); }
     const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'));
     const selectedWords = selectedButtons.map(button => button.textContent);
 
-    if(selectedButtons.length == 1) {
+    if (selectedButtons.length == 1) {
         // save you a click if you already asked for a hint
         let title = selectedButtons[0].title; // bit of a hack to rely on the title
-        if(title){
+        if (title) {
             showToast(title);
         }
     }
-    
-    if(selectedWords.length != MATCH) return;
+
+    if (selectedWords.length != MATCH) return;
 
     // Check if all selected words belong to the same group
     let validGroup = null;
-    for(const groupName of Object.keys(groups)){
-        if(groups[groupName].includes(selectedWords[0])){
+    for (const groupName of Object.keys(groups)) {
+        if (groups[groupName].includes(selectedWords[0])) {
             validGroup = groupName;
             break;
         }
@@ -211,7 +211,7 @@ function checkForValidWord(grid, groups){
     selectedButtons.forEach(button => {
         button.classList.remove('selected');
     });
-    
+
     if (!validGroup) return; // No valid group found for first word
 
     // Check that all selected words belong to the same group
@@ -223,8 +223,8 @@ function checkForValidWord(grid, groups){
         selectedButtons.forEach(button => button.classList.add('valid'));
 
         __progress[validGroup]++;
-        
-        if (grid.querySelectorAll('.button').length === grid.querySelectorAll('.button.valid').length){
+
+        if (grid.querySelectorAll('.button').length === grid.querySelectorAll('.button.valid').length) {
             victory(groups);
         }
         else {
@@ -237,7 +237,7 @@ function checkForValidWord(grid, groups){
     }
 }
 
-function updateButtons(){
+function updateButtons() {
     const btHelp = document.getElementById('btHelp');
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
@@ -258,7 +258,7 @@ function updateButtons(){
 }
 updateButtons();
 
-function shuffle(arr){
+function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -270,14 +270,14 @@ function showToast(message, duration = 3000) {
     const toast = document.getElementById('toast');
     toast.textContent = message;
     toast.classList.add('show');
-    
+
     // Hide toast after specified duration
     setTimeout(() => {
         toast.classList.remove('show');
     }, duration);
 }
 
-function victory(groups){
+function victory(groups) {
     __victory = true;
     const grid = document.getElementById('grid');
     grid.innerHTML = ''; // Clear the board
@@ -292,23 +292,23 @@ function victory(groups){
 
     let score = (200 - __errors - __hints.length * 5) / 2;
     let grade = "-";
-    if(score >= 70) grade = "C";
-    if(score >= 77) grade = "C+";
-    if(score >= 80) grade = "B-";
-    if(score >= 83) grade = "B";
-    if(score >= 87) grade = "B+";
-    if(score >= 90) grade = "A-";
-    if(score >= 93) grade = "A";
-    if(score >= 97) grade = "A+";
-    if(score >= 100) grade = "S+";
+    if (score >= 70) grade = "C";
+    if (score >= 77) grade = "C+";
+    if (score >= 80) grade = "B-";
+    if (score >= 83) grade = "B";
+    if (score >= 87) grade = "B+";
+    if (score >= 90) grade = "A-";
+    if (score >= 93) grade = "A";
+    if (score >= 97) grade = "A+";
+    if (score >= 100) grade = "S+";
     document.getElementById('grade').innerText = grade;
 
     let divMain = document.getElementById('categories');
     divMain.innerHTML = '';
 
-    for(const groupName of Object.keys(groups)){
+    for (const groupName of Object.keys(groups)) {
         const words = groups[groupName];
-        
+
         const h2 = document.createElement('h2');
         h2.textContent = groupName;
         divMain.appendChild(h2);
