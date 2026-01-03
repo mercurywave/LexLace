@@ -17,6 +17,7 @@ body {
     z-index: 1000; /* Ensure it appears over the grid */
 }
 #popHelp{
+    min-width: 250px;
     max-width: 300px;
     inset: auto;      /* clears the auto-centering */
     position: fixed;
