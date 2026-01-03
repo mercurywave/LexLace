@@ -9,6 +9,7 @@ let __errors = 0;
 let __hints = [];
 let __victory = false;
 let __gameGroups = {};
+let __progress = {};
 
 // script.js
 document.addEventListener('DOMContentLoaded', function() {
@@ -95,9 +96,12 @@ function hookButtons(data){
 }
 
 function populateGrid(data) {
+    // reset state
     __errors = 0;
     __hints = [];
     __victory = false;
+    __gameGroups ={};
+    __progress = {};
     document.getElementById('victory').classList.toggle("noDisp", true);
 
     const allGroupNames = Object.keys(data);
@@ -111,6 +115,7 @@ function populateGrid(data) {
             .filter(word => !foundWords.includes(word));
         if(uniqueWords.length < PER) continue;
         groupWords[groupName] = uniqueWords.slice(0, PER);
+        __progress[groupName] = 0;
         console.log(groupName, groupWords[groupName]);
         foundWords = foundWords.concat(groupWords[groupName]);
         count++;
@@ -191,12 +196,14 @@ function checkForValidWord(grid, groups){
 
         // All words are from the same group, highlight them
         selectedButtons.forEach(button => button.classList.add('valid'));
+
+        __progress[validGroup]++;
         
         if (grid.querySelectorAll('.button').length === grid.querySelectorAll('.button.valid').length){
             victory(groups);
         }
         else {
-            showToast(validGroup);
+            showToast(validGroup + ' ' + __progress[validGroup] + '/' + (PER / MATCH));
         }
     } else {
         // Words are from different groups, remove highlighting
