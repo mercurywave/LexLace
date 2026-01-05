@@ -232,9 +232,21 @@ function checkForValidWord(grid, groups) {
             showToast(validGroup + ' ' + __progress[validGroup] + '/' + CHUNK_COUNT);
         }
     } else {
-        // Words are from different groups, remove highlighting
-        selectedButtons.forEach(button => button.classList.remove('valid'));
+        // Words are from different groups - show error animation
+        selectedButtons.forEach(button => {
+            button.classList.add('error');
+            button.classList.remove('selected');
+        });
+        
+        // Increment error counter immediately
         __errors++;
+        
+        // Remove error animation after 500ms
+        setTimeout(() => {
+            selectedButtons.forEach(button => {
+                button.classList.remove('error');
+            });
+        }, 500);
     }
 }
 
