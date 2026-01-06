@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function hookButtons(data) {
 
+    const btMenu = document.getElementById('btMenu');
     const btHelp = document.getElementById('btHelp');
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
@@ -125,7 +126,22 @@ function hookButtons(data) {
         pop.showPopover();
         soj.classList.toggle('noDisp', false);
     });
+    btMenu.addEventListener('click', () => {
+        let pop = document.getElementById('popMenu');
+        if (pop.matches(':popover-open')) return; // already visible - dismiss
+        pop.showPopover();
+        soj.classList.toggle('noDisp', false);
+    });
     soj.addEventListener('click', () => soj.classList.toggle('noDisp', true));
+    
+    // Menu new game button event listener
+    document.getElementById('menuNewGame').addEventListener('click', () => {
+        clearGameState();
+        populateGrid(data);
+        document.getElementById('popMenu').hidePopover();
+        soj.classList.toggle('noDisp', true);
+    });
+    
     btReset.addEventListener('click', () => {
         const buttons = grid.querySelectorAll('.button');
         buttons.forEach(button => {
@@ -361,6 +377,7 @@ function checkForValidWord(grid, groups) {
 }
 
 function updateButtons() {
+    const btMenu = document.getElementById('btMenu');
     const btHelp = document.getElementById('btHelp');
     const btReset = document.getElementById('btReset');
     const btShuffle = document.getElementById('btShuffle');
@@ -370,6 +387,7 @@ function updateButtons() {
     const btCheat = document.getElementById('btCheat');
     const selectedButtons = Array.from(grid.querySelectorAll('.button.selected'));
     const validButtons = Array.from(grid.querySelectorAll('.button.valid'));
+    btMenu.classList.toggle('noDisp', __victory);
     btReset.classList.toggle('noDisp', selectedButtons.length === 0);
     btShuffle.classList.toggle('noDisp', selectedButtons.length > 0 || __victory);
     btClear.classList.toggle('noDisp', selectedButtons.length > 0 || validButtons.length === 0);
