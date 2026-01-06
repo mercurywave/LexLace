@@ -11,6 +11,55 @@ let __hints = [];
 let __victory = false;
 let __gameGroups = {};
 let __progress = {};
+let __validWords = [];
+
+// State management functions
+function saveGameState() {
+    try {
+        // Get current grid button order and states
+        const grid = document.getElementById('grid');
+        const buttons = Array.from(grid.querySelectorAll('.button'));
+        const gridState = buttons.map(button => ({
+            text: button.textContent,
+            valid: button.classList.contains('valid'),
+            hint: button.getAttribute('title') || null
+        }));
+        
+        const gameState = {
+            errors: __errors,
+            hints: __hints,
+            gameGroups: __gameGroups,
+            progress: __progress,
+            validWords: __validWords,
+            gridState: gridState,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('lexlaceGameState', JSON.stringify(gameState));
+    } catch (error) {
+        console.error('Failed to save game state:', error);
+    }
+}
+
+function loadGameState() {
+    try {
+        const savedState = localStorage.getItem('lexlaceGameState');
+        if (savedState) {
+            const gameState = JSON.parse(savedState);
+            return gameState;
+        }
+    } catch (error) {
+        console.error('Failed to load game state:', error);
+    }
+    return null;
+}
+
+function clearGameState() {
+    try {
+        localStorage.removeItem('lexlaceGameState');
+    } catch (error) {
+        console.error('Failed to clear game state:', error);
+    }
+}
 
 // script.js
 document.addEventListener('DOMContentLoaded', function () {
@@ -18,7 +67,14 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('words.json')
         .then(response => response.json())
         .then(data => {
-            populateGrid(data);
+            // Check for saved game state first
+            const savedState = loadGameState();
+            if (savedState) {
+                showToast('Game restored from previous session');
+                populateGrid(data, savedState);
+            } else {
+                populateGrid(data);
+            }
             hookButtons(data);
         })
         .catch(error => {
@@ -83,15 +139,18 @@ function hookButtons(data) {
         grid.innerHTML = '';
         buttons.forEach(button => grid.appendChild(button));
         updateButtons();
+        saveGameState();
     });
-    btClear.addEventListener('click', () => {
-        const validButtons = grid.querySelectorAll('.valid');
+btClear.addEventListener('click', () => {
+        const validButtons = grid.querySelectorAll('.button.valid');
         validButtons.forEach(button => {
             button.remove();
         });
         updateButtons();
+        saveGameState();
     });
     btNewGame.addEventListener('click', () => {
+        clearGameState();
         populateGrid(data);
     });
     btHint.addEventListener('click', () => {
@@ -104,6 +163,8 @@ function hookButtons(data) {
                 if (!__hints.includes(word)) {
                     __hints.push(word);
                     selectedButtons[0].setAttribute('title', groupName);
+                    // Save game state after hint
+                    saveGameState();
                 }
                 break;
             }
@@ -121,15 +182,7 @@ function hookButtons(data) {
     });
 }
 
-function populateGrid(data) {
-    // reset state
-    __errors = 0;
-    __hints = [];
-    __victory = false;
-    __gameGroups = {};
-    __progress = {};
-    document.getElementById('victory').classList.toggle("noDisp", true);
-
+function setupNewGame(data) {
     const allGroupNames = Object.keys(data);
     const groupNames = shuffle(allGroupNames);
     let foundWords = [];
@@ -148,39 +201,83 @@ function populateGrid(data) {
         if (count >= GROUPS) break;
     }
     __gameGroups = groupWords;
-    groupNames.forEach(groupName => {
-        const wordsFromGroup = data[groupName];
+    
+    // Check for duplicates
+    Object.keys(__gameGroups).forEach(groupName => {
+        const wordsFromGroup = __gameGroups[groupName];
         const hasDuplicates = wordsFromGroup.length !== [...new Set(wordsFromGroup)].length;
         if (hasDuplicates) {
             console.log(`Duplicate words found in group: ${groupName}`);
         }
     });
+}
+
+function createButton(text, grid, isValid = false, hint = null) {
+    const button = document.createElement('button');
+    button.className = 'button';
+    button.textContent = text;
+    
+    if (isValid) {
+        button.classList.add('valid');
+    }
+    
+    if (hint) {
+        button.setAttribute('title', hint);
+    }
+
+    let clickHandler = e => {
+        if (button.classList.contains('valid')) return;
+        button.classList.toggle('selected');
+        // Check if MATCH selected buttons form a valid word
+        checkForValidWord(grid, __gameGroups);
+        updateButtons();
+        e.preventDefault();
+    };
+
+    button.addEventListener('click', clickHandler);
+    return button;
+}
+
+function populateGrid(data, savedState = null) {
+    // reset state
+    if (savedState) {
+        __errors = savedState.errors;
+        __hints = savedState.hints;
+        __victory = false;
+        __gameGroups = savedState.gameGroups;
+        __progress = savedState.progress;
+        __validWords = savedState.validWords || [];
+    } else {
+        __errors = 0;
+        __hints = [];
+        __victory = false;
+        __gameGroups = {};
+        __progress = {};
+        __validWords = [];
+        setupNewGame(data);
+    }
+    document.getElementById('victory').classList.toggle("noDisp", true);
+    
     const grid = document.getElementById('grid');
-    let words = shuffle(foundWords);
+    grid.innerHTML = '';
+    
+    if (savedState && savedState.gridState) {
+        // Restore exact grid order and states
+        savedState.gridState.forEach(buttonState => {
+            const button = createButton(buttonState.text, grid, buttonState.valid, buttonState.hint);
+            grid.appendChild(button);
+        });
+    } else {
+        // Create new shuffled grid
+        const foundWords = Object.values(__gameGroups).flat();
+        let words = shuffle(foundWords);
 
-    // Create 16x16 grid of buttons
-    for (let i = 0; i < GROUPS * PER; i++) {
-        const button = document.createElement('button');
-        button.className = 'button';
-
-        // Select a random word from our array, cycling through if needed
-        const wordIndex = i % words.length;
-        button.textContent = words[wordIndex];
-
-        let clickHandler = e => {
-            if (button.classList.contains('valid')) return;
-            button.classList.toggle('selected');
-            // Check if MATCH selected buttons form a valid word
-            checkForValidWord(grid, groupWords);
-            updateButtons();
-            e.preventDefault();
-        };
-
-        // Add click event to toggle selection
-        //button.addEventListener('touchstart', clickHandler);
-        button.addEventListener('click', clickHandler);
-
-        grid.appendChild(button);
+        // Create 16x16 grid of buttons
+        for (let i = 0; i < GROUPS * PER; i++) {
+            const wordIndex = i % words.length;
+            const button = createButton(words[wordIndex], grid);
+            grid.appendChild(button);
+        }
     }
     updateButtons();
 }
@@ -223,7 +320,17 @@ function checkForValidWord(grid, groups) {
         // All words are from the same group, highlight them
         selectedButtons.forEach(button => button.classList.add('valid'));
 
+        // Add matched words to validWords array
+        selectedWords.forEach(word => {
+            if (!__validWords.includes(word)) {
+                __validWords.push(word);
+            }
+        });
+
         __progress[validGroup]++;
+
+        // Save game state after successful match
+        saveGameState();
 
         if (grid.querySelectorAll('.button').length === grid.querySelectorAll('.button.valid').length) {
             victory(groups);
@@ -240,6 +347,9 @@ function checkForValidWord(grid, groups) {
         
         // Increment error counter immediately
         __errors++;
+        
+        // Save game state after error
+        saveGameState();
         
         // Remove error animation after 500ms
         setTimeout(() => {
@@ -292,6 +402,7 @@ function showToast(message, duration = 3000) {
 
 function victory(groups) {
     __victory = true;
+    clearGameState(); // Clear saved state on victory
     const grid = document.getElementById('grid');
     grid.innerHTML = ''; // Clear the board
     const victory = document.getElementById('victory');
