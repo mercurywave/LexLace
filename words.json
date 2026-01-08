@@ -67,9 +67,22 @@
     "Namibian",
     "Karoo",
     "Sonoran",
-    "Western Sahara",
     "Arabian",
-    "Deccan"
+    "Deccan",
+    "Cactus",
+    "Ghost Town",
+    "Scorpion",
+    "Rattlesnake",
+    "Camel",
+    "Yucca",
+    "Roadrunner",
+    "Coyote",
+    "Vulture",
+    "Armadillo",
+    "Sand",
+    "Dunes",
+    "Heat",
+    "Sun"
   ],
   "Mountains": [
     "Himalayas",
@@ -100,21 +113,22 @@
     "Amazon",
     "Yangtze",
     "Mississippi",
+    "Missouri",
+    "Indus",
+    "Thames",
+    "Seine",
     "Ganges",
     "Danube",
     "Volga",
     "Congo",
-    "Paraná",
-    "Lena",
     "Yukon",
     "Mekong",
-    "Hoan Kiem",
+    "Ohio",
+    "Columbia",
     "Rio Grande",
     "Niger",
-    "Amur",
-    "Ural",
     "Tigris",
-    "Huai",
+    "Euphrates",
     "Zambezi",
     "Rhine",
     "Rhône"
@@ -144,7 +158,19 @@
     "Titanium",
     "Vanadium",
     "Chromium",
-    "Manganese"
+    "Manganese",
+    "Iron",
+    "Nickel",
+    "Copper",
+    "Arsenic",
+    "Krypton",
+    "Zirconium",
+    "Silver",
+    "Tin",
+    "Gold",
+    "Mercury",
+    "Bismuth",
+    "Radon"
   ],
   "Cheeses": [
     "Cheddar",
@@ -278,7 +304,8 @@
     "Woodpecker",
     "Heron",
     "Ibis",
-    "Pelican"
+    "Pelican",
+    "Duck"
   ],
   "African Animals": [
     "Elephant",
@@ -324,7 +351,8 @@
     "Chest",
     "Daybed",
     "Sideboard",
-    "Credenza"
+    "Credenza",
+    "Chair"
   ],
   "Prepositions": [
     "About",
@@ -429,11 +457,11 @@
     "Werewolf"
   ],
   "Reptiles": [
-    "Green Iguana",
-    "King Cobra",
+    "Iguana",
+    "Cobra",
     "Gila Monster",
-    "Box Turtle",
-    "Tree Frog",
+    "Turtle",
+    "Frog",
     "Python",
     "Crocodile",
     "Komodo Dragon",
@@ -465,17 +493,14 @@
     "Camel",
     "Alpaca",
     "Llama",
-    "Guinea Pig",
     "Rabbit",
-    "Dromedary",
-    "Bison",
     "Ostrich",
     "Emu",
     "Raccoon",
     "Bee",
     "Quail",
     "Pheasant",
-    "Geese"
+    "Goose"
   ],
   "Spices & Herbs": [
     "Cinnamon",
@@ -495,13 +520,13 @@
     "Coriander",
     "Paprika",
     "Bay Leaf",
-    "Star Anise",
-    "Fennel Seeds",
-    "Black Pepper",
-    "White Pepper",
+    "Anise",
+    "Fennel",
     "Chili Powder",
     "Sage",
-    "Marjoram"
+    "Marjoram",
+    "Salt",
+    "Pepper"
   ],
   "Fast Food Chains": [
     "McDonald's",
@@ -571,7 +596,7 @@
     "Remoulade",
     "Wasabi",
     "Pesto",
-    "Maple Syrup",
+    "Syrup",
     "Sriracha"
   ],
   "Famous Musicians": [
@@ -608,7 +633,7 @@
     "Waltz",
     "Foxtrot",
     "Rumba",
-    "Cha Cha Cha",
+    "Cha Cha",
     "Samba",
     "Bolero",
     "Quickstep",
@@ -621,8 +646,7 @@
     "Kathak",
     "Bharatanatyam",
     "Odissi",
-    "Belly Dance",
-    "Capoeira"
+    "Belly Dance"
   ],
   "Directors": [
     "Scorcese",
@@ -689,7 +713,7 @@
     "Ohm",
     "Maxwell",
     "Fahrenheit",
-    "Raytheon",
+    "Spencer",
     "Carver",
     "Siemens"
   ],
@@ -881,29 +905,56 @@
     "Loki"
   ],
   "State Capitals": [
-    "Austin",
-    "Baton Rouge",
-    "Sacramento",
-    "Salem",
-    "Phoenix",
-    "Denver",
+    "Montgomery",
     "Juneau",
-    "Annapolis",
-    "Lansing",
-    "Oklahoma City",
-    "Raleigh",
-    "Harrisburg",
-    "Columbia",
-    "Montpelier",
+    "Phoenix",
+    "Little Rock",
+    "Sacramento",
+    "Denver",
+    "Hartford",
+    "Dover",
     "Tallahassee",
-    "Bismarck",
+    "Atlanta",
+    "Honolulu",
+    "Boise",
+    "Springfield",
     "Indianapolis",
+    "Des Moines",
+    "Topeka",
     "Frankfort",
-    "Santa Fe",
-    "Concord",
-    "Carson City",
+    "Baton Rouge",
+    "Augusta",
+    "Annapolis",
+    "Boston",
+    "Lansing",
+    "Saint Paul",
     "Jackson",
-    "Dover"
+    "Jefferson City",
+    "Helena",
+    "Lincoln",
+    "Carson City",
+    "Concord",
+    "Trenton",
+    "Santa Fe",
+    "Albany",
+    "Raleigh",
+    "Bismarck",
+    "Columbus",
+    "Oklahoma City",
+    "Salem",
+    "Harrisburg",
+    "Providence",
+    "Columbia",
+    "Pierre",
+    "Nashville",
+    "Austin",
+    "Salt Lake City",
+    "Montpelier",
+    "Richmond",
+    "Olympia",
+    "Charleston",
+    "Madison",
+    "Cheyenne"
   ],
   "Asian Nations": [
     "China",
@@ -978,7 +1029,7 @@
     "Ramadan",
     "Bastille Day"
   ],
-  "Halloween Words": [
+  "Halloween": [
     "Pumpkin",
     "Ghost",
     "Witch",
@@ -1123,7 +1174,7 @@
     "Gambit",
     "Beast",
     "Cyclops",
-    "Jean Grey",
+    "Phoenix",
     "Magneto",
     "Quicksilver",
     "Scarlet Witch",
@@ -1133,7 +1184,18 @@
     "Ant Man",
     "Wasp",
     "Black Panther",
-    "Nick Fury"
+    "Nick Fury",
+    "Deadpool",
+    "Daredevil",
+    "Punisher",
+    "Nightcrawler",
+    "Hawkeye",
+    "Thing",
+    "Blade",
+    "Cable",
+    "Ms. Marvel",
+    "Gamora",
+    "Rogue"
   ],
   "Cartoon Characters": [
     "Bugs",
@@ -1153,8 +1215,20 @@
     "Heathcliff",
     "Tom",
     "Jerry",
+    "Sylvester",
+    "Tweety",
     "Scooby Doo",
-    "Shaggy"
+    "Shaggy",
+    "Snoopy",
+    "Pickachu",
+    "Homer",
+    "Bart",
+    "Popeye",
+    "Elmer",
+    "Taz",
+    "Felix",
+    "Yogi",
+    "Tintin"
   ],
   "Dog Breeds": [
     "Beagle",
@@ -1204,7 +1278,10 @@
     "South Pacific",
     "Annie",
     "42nd Street",
-    "Evita"
+    "Evita",
+    "Hadestown",
+    "Spamalot",
+    "Cabaret"
   ],
   "American Football Teams": [
     "Bills",
@@ -1279,7 +1356,7 @@
     "Zester",
     "Ice Cream Scoop",
     "Pastry Blender",
-    "Kitchen Scissors"
+    "Scissors"
   ],
   "Candies & Sweets": [
     "Skittles",
@@ -1565,7 +1642,8 @@
     "Land Rover",
     "Jaguar",
     "Lincoln",
-    "Volvo"
+    "Volvo",
+    "Opel"
   ],
   "Star Trek": [
     "Kirk",
@@ -1768,7 +1846,7 @@
     "Githyanki",
     "Mimic"
   ],
-  "Supervillains": [
+  "Super Villains": [
     "Joker",
     "Lex Luthor",
     "Magneto",
@@ -1788,7 +1866,12 @@
     "Bane",
     "Kraven the Hunter",
     "Red Skull",
-    "Gorilla Grodd"
+    "Gorilla Grodd",
+    "Darkseid",
+    "Loki",
+    "Kingpin",
+    "Apocalypse",
+    "Galactus"
   ],
   "Canada": [
     "Toronto",
